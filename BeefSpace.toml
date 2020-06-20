@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {OmelettePhraseOut = {Path = "."}}
+
+[Workspace]
+StartupProject = "OmelettePhraseOut"
