@@ -19,11 +19,13 @@ namespace OmelettePhraseOut
 
 				List<String> currentArgs = scope List<String>();
 
+				bool toUpper = false;
+
 				for (var arg in args)
 				{
 
 					if(currentArgs.Contains(arg))
-						FatalErrorDuplicateParameter(arg);
+						ErrorDuplicateParameter(arg);
 
 					currentArgs.Add(arg);
 
@@ -46,16 +48,27 @@ namespace OmelettePhraseOut
 
 						case "-u":
 
-							//must assign dynamically allocated string or you'll get a EXCEPTION_ACCESS_VIOLATION when phrase.ToUpper() is called
+							//Specifies that the phrase needs to be up-cased
 
-							phrase = new String(phrase);
+							//Up-casing needs to be done outside of the switch statement as the phrase is assigned to in the "-c" case and the programme arguments are not rearranged prior to entering the for loop
 
-							phrase.ToUpper();
+							toUpper = true;
 
 						default:
-							FatalErrorInvalidParameter(arg);
+							ErrorInvalidParameter(arg);
 
 					}
+
+				}
+
+				if(toUpper)
+				{
+
+					//must assign a dynamically allocated string or you'll get a EXCEPTION_ACCESS_VIOLATION when phrase.ToUpper() is called
+
+					phrase = new String(phrase);
+
+					phrase.ToUpper();
 
 				}
 
@@ -86,27 +99,45 @@ namespace OmelettePhraseOut
 
 		}
 
-		static void FatalErrorDuplicateParameter(String param)
+		static void ErrorDuplicateParameter(String param)
 		{
 
 			String errorMessage = new String();
 
-			errorMessage.Concat("Fatal Error - Duplicate parameter: ", param, " encountered");
+			errorMessage.Concat("Error - Duplicate parameter: ", param, " encountered");
 
-			Runtime.FatalError(errorMessage);
+			//Runtime.FatalError(errorMessage);
+
+			OutErrorMessageThenExit(errorMessage);
 
 		}
 
-		static void FatalErrorInvalidParameter(String param)
+		static void ErrorInvalidParameter(String param)
 		{
 
 			String errorMessage = new String();
 
-			errorMessage.Concat("Fatal Error - Invalid parameter: ", param, " encountered");
+			errorMessage.Concat("Error - Invalid parameter: ", param, " encountered");
 
-			Runtime.FatalError(errorMessage);
+			//Runtime.FatalError(errorMessage);
+
+			OutErrorMessageThenExit(errorMessage);
 
 		}
+
+		static void OutErrorMessageThenExit(String errorMessage)
+		{
+
+			Console.WriteLine(errorMessage);
+
+			//Console.In.Read();
+
+			Exit(1);
+
+		}
+
+		[LinkName("exit")]
+		public static extern void Exit(int exitCode);
 
 	}
 

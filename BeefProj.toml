@@ -3,6 +3,3 @@ FileVersion = 1
 [Project]
 Name = "OmelettePhraseOut"
 StartupObject = "OmelettePhraseOut.Program"
-
-[Configs.Debug.Win64]
-DebugCommandArguments = "-l"
